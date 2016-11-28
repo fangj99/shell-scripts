@@ -6,6 +6,7 @@
 # 
 # @song940
 #
+webroot="$PWD"
 response="/tmp/http-server.pipe"
 mkfifo $response > /dev/null 2>&1
 #
@@ -23,7 +24,7 @@ parse_request(){
   # while read request_header; do
   #   echo "$request_header"
   # done
-  local filename="$PWD$request_path"
+  local filename="$webroot$request_path"
   if [ -f "$filename" ]; then
     if [ -x "$filename" ]; then
       "$filename" > $response 2>&1
@@ -40,12 +41,13 @@ parse_request(){
 # start_server
 #
 start_server(){
-  local port=$1
+  local port=${1:-8080}
   while true; do
     cat $response | nc -l $port > \
-    >(parse_request)
+    >(parse_request) || break;
+    # test $? -gt 128 && break;
   done
   rm -f "$response"
 }
 
-start_server 8080
+start_server

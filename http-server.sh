@@ -7,7 +7,7 @@
 # @song940
 #
 webroot="$PWD"
-response="/tmp/http-server.pipe"
+response="/tmp/http-server-$RANDOM.pipe"
 mkfifo $response > /dev/null 2>&1
 #
 # parse request

@@ -9,6 +9,7 @@
 webroot="$PWD"
 response="/tmp/http-server-$RANDOM.pipe"
 mkfifo $response > /dev/null 2>&1
+trap "rm -f $response" EXIT INT TERM
 #
 # parse request
 #
@@ -24,6 +25,10 @@ parse_request(){
   # while read request_header; do
   #   echo "$request_header"
   # done
+  if [ ! -p "$response" ]; then
+    # echo "response file $response not exists!!"
+    return
+  fi
   local filename="$webroot$request_path"
   if [ -f "$filename" ]; then
     if [ -x "$filename" ]; then
@@ -33,6 +38,7 @@ parse_request(){
     fi
     return
   fi
+  
   echo "Not Found" > $response
 }
 
@@ -45,9 +51,8 @@ start_server(){
   while true; do
     cat $response | nc -l $port > \
     >(parse_request) || break;
-    # test $? -gt 128 && break;
   done
-  rm -f "$response"
 }
 
+# start server
 start_server $1

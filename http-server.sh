@@ -50,4 +50,4 @@ start_server(){
   rm -f "$response"
 }
 
-start_server
+start_server $1

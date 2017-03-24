@@ -1,5 +1,12 @@
 ## SHELL-SCRIPTS
 
+
+### INSTALLATION
+
+```bash
+~$ git clone git@github.com:song940/shell-scripts.git ~/.bin
+```
+
 ### TEMP DIRECTORY CREATION
 
 This function creates a temporary directory that is removed at the completion of the script. Any temporary files that are needed are written here.

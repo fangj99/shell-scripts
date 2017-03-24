@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# auto load PATH config from /etc/paths.d/*
+# ~$ cd /etc && ln -s $HOME/.bin/path-helper .
+# ~$ sudo cat >> /etc/profile <<EOF
+# # see https://gist.github.com/song940/af1c300890ca1024fa60
+# if [ -x /etc/path-helper  ]; then
+#   eval `/etc/path-helper -s`
+# fi
+# EOF
+#
+# https://gist.github.com/song940/af1c300890ca1024fa60
+
+PATH_DIR=/etc/paths.d
+
+for file in $(ls $PATH_DIR); do
+  for line in $(cat "$PATH_DIR/$file"); do
+    PATH=$PATH:$line
+  done
+done
+
+case "$1" in
+  -s)
+    echo "PATH=\"$PATH\"; export PATH;";
+    ;;
+   *)
+    export PATH;
+    ;;
+esac
